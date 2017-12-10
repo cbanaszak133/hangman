@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hangman</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+  <h1>Hangman Game</h1>
+  <hr>
+
+  <div id="game-board">
+    <p id="text">Press any key to start the game</p>
+    <p id="words-remaining"></p>
+
+    <div>Guesses left:
+      <p id="guesses-left"></p>
+    </div>
+     
+    <p id="win-word"></p>
+
+    <h2>Guessed letters:</h2>
+      <div id="guessed-letters"></div>
+  </div>
+
+  <script type="text/javascript">
+
+    var words = ["purple rain", "controversy", "when doves cry"];
+    var word = "";
+    var guessArray = [];
+    var lettersRemaining = 0;
+    var guessedLetters = [];
+    var guessesLeft  = 10;
+
+
+    document.onkeyup = function(event) {
+      var keyPressed = event.key;
+
+      if(word == ""){
+        play(words[Math.floor(Math.random()*words.length)]);
+      }
+      else if(word.indexOf(keyPressed) != -1 && guessArray.indexOf(keyPressed.toUpperCase()) == -1){
+        guessedLetters.push(keyPressed);
+        correctGuess(keyPressed);
+      }
+      else{
+
+        guessesLeft--;
+        $("#guesses-left").text(guessesLeft);
+
+        if(guessesLeft == 0){
+          lose();
+        }
+        else if(guessedLetters.indexOf(keyPressed) == -1){
+          guessedLetters.push(keyPressed);
+          writeGuessedLetters(guessedLetters);
+        } 
+
+
+      }
+    }
+
+    function play(playingWord){
+      word = playingWord;
+      lettersRemaining = 0;
+      guessArray = [];
+      guessedLetters = [];
+      var setUpGuess = "";
+      guessesLeft = 10;
+
+      for(var i = 0; i < word.length; i++){
+        if(word[i] == " "){
+          guessArray[i] = " ";
+        }
+        else{
+          guessArray[i] = "_ ";
+          lettersRemaining++;
+        }
+        setUpGuess += guessArray[i];
+
+      }
+      
+
+      $("#text").text(setUpGuess);
+      $("#guesses-left").text(guessesLeft);
+      $("#words-remaining").text(lettersRemaining);
+      writeGuessedLetters(guessedLetters);
+    }
+
+    function correctGuess(letter){
+      var updatedGuess = "";
+      word = word.toLowerCase();
+
+
+      console.log(word);
+      for(var i = 0; i < word.length; i++){
+        if(word[i] == letter){
+          guessArray[i] = letter.toUpperCase();
+          lettersRemaining--;
+        }
+      } 
+
+      for(var i = 0; i < guessArray.length; i++){
+        updatedGuess += guessArray[i];
+      }
+
+      if(lettersRemaining == 0){
+        win();
+      }  
+      else{
+        $("#text").text(updatedGuess);
+        $("#words-remaining").text(lettersRemaining);
+        writeGuessedLetters(guessedLetters);
+        
+      }       
+    }
+
+    function writeGuessedLetters(letArr){
+        var guessed = "";
+        for(var i = 0; i < letArr.length; i++){
+          guessed += letArr[i] + ", ";
+        }
+        $("#guessed-letters").text(guessed);
+    }
+
+    function win(){
+      $("#text").text("You win!");
+      word = "";
+    }  
+      
+    function lose(){
+      $("#text").text("Sorry, you lost! Press a key to play again.");
+      word = "";
+
+    }  
+     
+
+    
+    
+
+
+  </script>
+
+</body>
+</html>
