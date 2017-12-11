@@ -4,48 +4,106 @@
   <meta charset="UTF-8">
   <title>Hangman</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative" rel="stylesheet">
+
 </head>
 <body>
 
-  <h1>Hangman Game</h1>
+  <h1>Lord of the Rings Hangman</h1>
   <hr>
 
-  <div id="game-board">
-    <p id="text">Press any key to start the game</p>
-    <p id="words-remaining"></p>
+  <div id="game-board" class="container">
+  	<div class="row">
+  		<div class="col-md-4">
+  			<img id="display-img" src = "the-shire.jpg">
+  		</div>
 
-    <div>Guesses left:
-      <p id="guesses-left"></p>
-    </div>
-     
-    <p id="win-word"></p>
+  		<div class="col-md-4">
+  			<p id="text">Press any key to start the game</p>
 
-    <h2>Guessed letters:</h2>
-      <div id="guessed-letters"></div>
-  </div>
+  			<div>Guesses left:
+      			<p id="guesses-left"></p>
+    		</div>
+
+			Words remaining:
+    		<p id="words-remaining"></p>
+    	</div>
+    	
+    	<div class="col-md-4">
+    		<h2>Guessed letters:</h2>
+      		<div id="guessed-letters"></div>
+      		<h3>Wins:</h3>
+      		<div id="wins"></div>
+      		<h3>Losses:</h3>
+      		<div id="losses"></div>
+      	</div>	
+	</div>
+  </div>	
+
+  <br><br>
+
+  <div class="container">
+  	<div class="row">
+  		<img id="map" src="middle-earth.jpg">
+  	</div>
+  </div>	
+
+  <audio id="play-music">
+  	<source src="ConcerningHobbits.mp3">
+  </audio>	
+
+  <audio id="lose-music">
+  	<source src="MinasMorgul.mp3">
+  </audio>	
+
+
+  <style>
+  	/*Fixes the spacing issue with between the dashes*/
+	#text{
+		white-space: pre;
+	}
+
+	body{
+		font-family: 'Cinzel Decorative', cursive;
+		background-image:url("paper.png");
+	}
+	
+	#map{
+		display:block;
+		margin:auto;
+	}
+
+	#display-img{
+		height:200px;
+		width:280px;
+	}
+
+  </style>	
 
   <script type="text/javascript">
 
-    var words = ["purple rain", "controversy", "when doves cry"];
+    var words = ["gandalf the grey", "aragorn", "helms deep", "eomer", "frodo", "samwise the brave", "mordor"];
     var word = "";
     var guessArray = [];
     var lettersRemaining = 0;
     var guessedLetters = [];
     var guessesLeft  = 10;
-
+    var wins = 0;
+    var losses = 0;
 
     document.onkeyup = function(event) {
       var keyPressed = event.key;
 
       if(word == ""){
         play(words[Math.floor(Math.random()*words.length)]);
+        
       }
       else if(word.indexOf(keyPressed) != -1 && guessArray.indexOf(keyPressed.toUpperCase()) == -1){
         guessedLetters.push(keyPressed);
         correctGuess(keyPressed);
       }
       else{
-
         guessesLeft--;
         $("#guesses-left").text(guessesLeft);
 
@@ -55,9 +113,7 @@
         else if(guessedLetters.indexOf(keyPressed) == -1){
           guessedLetters.push(keyPressed);
           writeGuessedLetters(guessedLetters);
-        } 
-
-
+        }
       }
     }
 
@@ -68,6 +124,10 @@
       guessedLetters = [];
       var setUpGuess = "";
       guessesLeft = 10;
+
+      document.getElementById("play-music").currentTime = 0;
+      document.getElementById("play-music").play();
+      document.getElementById("lose-music").pause();
 
       for(var i = 0; i < word.length; i++){
         if(word[i] == " "){
@@ -85,6 +145,9 @@
       $("#text").text(setUpGuess);
       $("#guesses-left").text(guessesLeft);
       $("#words-remaining").text(lettersRemaining);
+      $("#wins").text(wins);
+      $("#losses").text(losses);
+      $("#display-img").attr("src", "the-shire.jpg");
       writeGuessedLetters(guessedLetters);
     }
 
@@ -107,12 +170,11 @@
 
       if(lettersRemaining == 0){
         win();
-      }  
+      }
       else{
         $("#text").text(updatedGuess);
         $("#words-remaining").text(lettersRemaining);
         writeGuessedLetters(guessedLetters);
-        
       }       
     }
 
@@ -126,11 +188,23 @@
 
     function win(){
       $("#text").text("You win!");
+      document.getElementById("play-music").pause();
+      wins++; 
+
       word = "";
     }  
       
     function lose(){
+      $("#display-img").attr("src", "theeye.jpg");
       $("#text").text("Sorry, you lost! Press a key to play again.");
+
+
+      losses++; 
+
+      document.getElementById("play-music").pause();
+      document.getElementById("lose-music").currentTime = 0;
+      document.getElementById("lose-music").play();
+
       word = "";
 
     }  
