@@ -1,0 +1,21 @@
+
+  	/*Fixes the spacing issue with between the dashes*/
+	#text{
+		white-space: pre;
+	}
+
+	body{
+		font-family: 'Cinzel Decorative', cursive;
+		background-image:url("paper.png");
+	}
+	
+	#map{
+		display:block;
+		margin:auto;
+	}
+
+	#display-img{
+		height:200px;
+		width:280px;
+	}
+

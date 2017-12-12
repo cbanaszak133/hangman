@@ -6,6 +6,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
 
 </head>
 <body>
@@ -16,7 +17,7 @@
   <div id="game-board" class="container">
   	<div class="row">
   		<div class="col-md-4">
-  			<img id="display-img" src = "the-shire.jpg">
+  			<img id="display-img" src = "assets/the-shire.jpg">
   		</div>
 
   		<div class="col-md-4">
@@ -26,7 +27,7 @@
       			<p id="guesses-left"></p>
     		</div>
 
-			Words remaining:
+			Letters remaining:
     		<p id="words-remaining"></p>
     	</div>
     	
@@ -45,45 +46,26 @@
 
   <div class="container">
   	<div class="row">
-  		<img id="map" src="middle-earth.jpg">
+  		<img id="map" src="assets/middle-earth.jpg">
   	</div>
   </div>	
 
   <audio id="play-music">
-  	<source src="ConcerningHobbits.mp3">
+  	<source src="assets/ConcerningHobbits.mp3">
   </audio>	
 
   <audio id="lose-music">
-  	<source src="MinasMorgul.mp3">
+  	<source src="assets/MinasMorgul.mp3">
   </audio>	
 
-
-  <style>
-  	/*Fixes the spacing issue with between the dashes*/
-	#text{
-		white-space: pre;
-	}
-
-	body{
-		font-family: 'Cinzel Decorative', cursive;
-		background-image:url("paper.png");
-	}
-	
-	#map{
-		display:block;
-		margin:auto;
-	}
-
-	#display-img{
-		height:200px;
-		width:280px;
-	}
-
-  </style>	
+  <audio id="win-music">
+  	<source src="assets/win-music.mp3">
+  </audio>
 
   <script type="text/javascript">
 
-    var words = ["gandalf the grey", "aragorn", "helms deep", "eomer", "frodo", "samwise the brave", "mordor"];
+    var words = ["gandalf the grey", "aragorn", "helms deep", "eomer", "frodo", "samwise the brave", "mordor",
+    			"legolas", "minas tirith", "the shire", "rivendell", "mines of moria", "shards of narsil"];
     var word = "";
     var guessArray = [];
     var lettersRemaining = 0;
@@ -128,6 +110,7 @@
       document.getElementById("play-music").currentTime = 0;
       document.getElementById("play-music").play();
       document.getElementById("lose-music").pause();
+      document.getElementById("win-music").pause();
 
       for(var i = 0; i < word.length; i++){
         if(word[i] == " "){
@@ -147,7 +130,7 @@
       $("#words-remaining").text(lettersRemaining);
       $("#wins").text(wins);
       $("#losses").text(losses);
-      $("#display-img").attr("src", "the-shire.jpg");
+      $("#display-img").attr("src", "assets/the-shire.jpg");
       writeGuessedLetters(guessedLetters);
     }
 
@@ -168,51 +151,53 @@
         updatedGuess += guessArray[i];
       }
 
+      $("#words-remaining").text(lettersRemaining);
+
       if(lettersRemaining == 0){
         win();
       }
       else{
         $("#text").text(updatedGuess);
-        $("#words-remaining").text(lettersRemaining);
         writeGuessedLetters(guessedLetters);
       }       
     }
 
     function writeGuessedLetters(letArr){
-        var guessed = "";
-        for(var i = 0; i < letArr.length; i++){
-          guessed += letArr[i] + ", ";
-        }
-        $("#guessed-letters").text(guessed);
+       var guessed = "";
+       for(var i = 0; i < letArr.length; i++){
+         guessed += letArr[i] + ", ";
+       }
+       $("#guessed-letters").text(guessed);
     }
 
     function win(){
-      $("#text").text("You win!");
-      document.getElementById("play-music").pause();
+      $("#display-img").attr("src", "assets/winpic.jpg");
+      $("#text").text("You win! The word was " + word + ". \nPress a key to play again.");
+
       wins++; 
+      $("#wins").text(wins);
+
+      document.getElementById("play-music").pause();
+	  document.getElementById("win-music").currentTime = 0;
+      document.getElementById("win-music").play();
 
       word = "";
     }  
       
     function lose(){
-      $("#display-img").attr("src", "theeye.jpg");
-      $("#text").text("Sorry, you lost! Press a key to play again.");
+      $("#display-img").attr("src", "assets/theeye.jpg");
+      $("#text").text("Sorry, the word was " + word + ". \nPress a key to play again.");
 
 
       losses++; 
+      $("#losses").text(losses);
 
       document.getElementById("play-music").pause();
       document.getElementById("lose-music").currentTime = 0;
       document.getElementById("lose-music").play();
 
       word = "";
-
     }  
-     
-
-    
-    
-
 
   </script>
 
