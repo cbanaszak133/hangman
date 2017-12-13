@@ -87,7 +87,7 @@
       }
       else{
         guessesLeft--;
-        $("#guesses-left").text(guessesLeft);
+        document.getElementById("guesses-left").innerHTML = guessesLeft;
 
         if(guessesLeft == 0){
           lose();
@@ -124,13 +124,22 @@
 
       }
       
-
-      $("#text").text(setUpGuess);
-      $("#guesses-left").text(guessesLeft);
-      $("#words-remaining").text(lettersRemaining);
-      $("#wins").text(wins);
-      $("#losses").text(losses);
-      $("#display-img").attr("src", "assets/the-shire.jpg");
+      // I originally wrote the text changes with jQuery,
+      // just keeping them commented out in case anything 
+      // weird happens. 
+      
+      document.getElementById("text").innerHTML = setUpGuess;
+      // $("#text").text(setUpGuess);
+      document.getElementById("guesses-left").innerHTML = guessesLeft;
+      // $("#guesses-left").text(guessesLeft);
+      document.getElementById("words-remaining").innerHTML = lettersRemaining;
+      // $("#words-remaining").text(lettersRemaining);
+      document.getElementById("wins").innerHTML = wins;
+      // $("#wins").text(wins);
+      document.getElementById("losses").innerHTML = losses;
+      //$("#losses").text(losses);
+      document.getElementById("display-img").src = "assets/the-shire.jpg";
+      //$("#display-img").attr("src", "assets/the-shire.jpg");
       writeGuessedLetters(guessedLetters);
     }
 
@@ -139,7 +148,7 @@
       word = word.toLowerCase();
 
 
-      console.log(word);
+      //console.log(word);
       for(var i = 0; i < word.length; i++){
         if(word[i] == letter){
           guessArray[i] = letter.toUpperCase();
@@ -151,13 +160,14 @@
         updatedGuess += guessArray[i];
       }
 
-      $("#words-remaining").text(lettersRemaining);
+      document.getElementById("words-remaining").innerHTML = lettersRemaining;
+      console.log(lettersRemaining);
 
       if(lettersRemaining == 0){
         win();
       }
       else{
-        $("#text").text(updatedGuess);
+        document.getElementById("text").innerHTML = updatedGuess;
         writeGuessedLetters(guessedLetters);
       }       
     }
@@ -167,15 +177,18 @@
        for(var i = 0; i < letArr.length; i++){
          guessed += letArr[i] + ", ";
        }
-       $("#guessed-letters").text(guessed);
+       document.getElementById("guessed-letters").innerHTML = guessed;
+       //$("#guessed-letters").text(guessed);
     }
 
     function win(){
-      $("#display-img").attr("src", "assets/winpic.jpg");
-      $("#text").text("You win! The word was " + word + ". \nPress a key to play again.");
+      document.getElementById("display-img").src = "assets/winpic.jpg";
+      //$("#display-img").attr("src", "assets/winpic.jpg");
+      document.getElementById("text").innerHTML = "You win! The word was " + word + ". \nPress a key to play again.";
+      //$("#text").text("You win! The word was " + word + ". \nPress a key to play again.");
 
       wins++; 
-      $("#wins").text(wins);
+      document.getElementById("wins").innerHTML = wins;
 
       document.getElementById("play-music").pause();
 	  document.getElementById("win-music").currentTime = 0;
@@ -185,12 +198,14 @@
     }  
       
     function lose(){
-      $("#display-img").attr("src", "assets/theeye.jpg");
-      $("#text").text("Sorry, the word was " + word + ". \nPress a key to play again.");
+      document.getElementById("display-img").src = "assets/theeye.jpg";
+      //$("#display-img").attr("src", "assets/theeye.jpg");
+      document.getElementById("text").innerHTML = "Sorry, the word was " + word + ". \nPress a key to play again.";
+      //$("#text").text("Sorry, the word was " + word + ". \nPress a key to play again.");
 
 
       losses++; 
-      $("#losses").text(losses);
+      document.getElementById("losses").innerHTML = losses;
 
       document.getElementById("play-music").pause();
       document.getElementById("lose-music").currentTime = 0;
